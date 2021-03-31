@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&family=Grand+Hotel&display=swap");
+
+nav {
+  background-color: whitesmoke !important;
+}
+
+a {
+  color: black !important;
+}
+
+.brand-logo,
+h2 {
+  font-family: "Grand Hotel", cursive;
+}
+
+#nav-mobile li {
+  font-family: "Akaya Kanadaka", cursive;
+}
+
+.login-card {
+  padding: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 10px auto;
+}
+
+.input-field input[type="text"]:focus {
+  border-bottom: 1px solid #2196f3 !important;
+  box-shadow: 0 1px 0 0 #2196f3 !important;
+}
+
+.input-field input[type="password"]:focus {
+  border-bottom: 1px solid #2196f3 !important;
+  box-shadow: 0 1px 0 0 #2196f3 !important;
+}
+.endtext {
+  margin-top: 10px;
+  font-family: "Akaya Kanadaka", cursive;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.item {
+  width: 30%;
+  margin-top: 5px;
+}
+
+@media only screen and (max-width: 992px) {
+  nav .brand-logo {
+    left: 15%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  nav .brand-logo {
+    left: 35%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+}
+
+.home-card {
+  max-width: 1000px;
+  height: max-content;
+  margin: 10px auto;
+  padding: 10px;
+}
+
+.create-post {
+  max-width: 80%;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+#toast-container {
+  top: 50px;
+  right: 20px;
+  left: auto;
+}
+
+.follow-unfollow {
+  margin: 10px !important;
+}
+
+.material-icons:hover {
+  cursor: pointer;
+}
