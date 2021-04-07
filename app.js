@@ -2,7 +2,7 @@
 // se importa express
 const { json } = require('express')
 const express = require('express')
-// contraseña mongo 3FBUZCkVp2AitsbW
+
 // se crea una instancia de express
 const app = express()
 const mongoose = require('mongoose')
