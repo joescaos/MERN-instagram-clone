@@ -1,12 +1,9 @@
-import { React, useState, useContext } from "react";
-import { UserContext } from '../../App'
-import { Link, useHistory } from "react-router-dom";
+import { React, useState } from "react";
+import { useHistory } from "react-router-dom";
 import  M from 'materialize-css';
 
-const Login = () => {
+const Reset = () => {
 
-  const { state, dispatch } = useContext(UserContext)
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const history = useHistory()
 
@@ -15,14 +12,13 @@ const Login = () => {
       M.toast({html: "email invalido", classes:"#c62828 red darken-3"})
       return 
     }
-    fetch("/signin",
+    fetch("/reset-password",
       {
         method: 'post',
         headers: {
           'content-type': 'application/json'
         },
         body: JSON.stringify({
-          password,
           email
         })
       }
@@ -31,12 +27,8 @@ const Login = () => {
       if(data.error){
         M.toast({html: data.error, classes:"#c62828 red darken-3"})
       } else {
-        console.log(data.user)
-        localStorage.setItem("jwt", data.token)
-        localStorage.setItem("user", JSON.stringify(data))
-        dispatch({type: "USER", payload:data})
-        M.toast({html: "Sesión iniciada", classes: "#388e3c green darken-2"});
-        history.push("/")
+        M.toast({html: data.message, classes: "#388e3c green darken-2"});
+        history.push("/login")
       }
     }).catch( err => {
       console.log(err)
@@ -52,20 +44,11 @@ const Login = () => {
           <input type="text" placeholder="email" 
             value={ email }
             onChange={evt => setEmail(evt.target.value )}/>
-          <input type="password" placeholder="password" 
-            value={ password }
-            onChange={evt => setPassword(evt.target.value )}/>
           <a className="waves-effect waves-light btn #2196f3 blue"
           onClick={() => postData()}>
-            Iniciar Sesión
+            Cambiar contraseña
           </a>
           <div className="endtext">
-          <p className="left-align endtext">
-              <Link to="/signup">Aún no tienes cuenta? Registrate</Link>
-          </p>
-          <p className="left-align endtext">
-              <Link to="/reset">Olvidaste la contraseña?</Link>
-          </p>
           </div>
         </div>
       </div>
@@ -73,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Reset;

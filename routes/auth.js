@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const User = mongoose.model("User")
+const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config/keys')
@@ -40,6 +41,12 @@ router.post('/signup', (req, res) => {
     
             user.save()
             .then(user =>{
+                transporter.sendMail({
+                    to: user.email,
+                    from: "jxexcxo@gmail.com",
+                    subject: "Registrado exitosamente",
+                    html: "<h1>Bienvenido al clone de instagram creado por Johan Cañas</h1>"
+                })
                 res.json({message: "saved successfully"})
             })
             .catch(err => {
@@ -77,6 +84,57 @@ router.post('/signin', (req, res) => {
             console.log(err)
         })
     })
+})
+
+router.post('/reset-password', (req, res) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if(err){
+            console.log(err)
+        }
+
+        const token = buffer.toString("hex")
+        User.findOne({email: req.body.email})
+            .then(user => {
+                if(!user){
+                    return res.status(422).json({error: "Usuario con encontrado con esa dirección de email"})
+                }
+                user.resetToken = token
+                user.expireDate = Date.now() + 3600000
+                user.save().then(result => {
+                    transporter.sendMail({
+                        to: user.email,
+                        from: "jxexcxo@gmail.com",
+                        subject: "Solicitud de nueva contraseña",
+                        html: `
+                            <p>Solicitaste cambiar la contraseña</p>
+                            <h5>Haz click en este <a href="http//localhost:3000/reset/${token}">link</a> para tu cambio de contraseña</h5>
+                        `
+                    })
+                    res.json({message: "Verifica tu email"})
+                })
+            })
+    })
+})
+
+router.post('/newpassword', (req, res) => {
+    const newPassword = req.body.password
+    const sentToken = req.body.token
+    User.findOne({resetToken: sentToken, expireToken: {$gt:Date.now()}})
+        .then(user => {
+            if(!user){
+                return res.status(422).json({error: "Token expirado, intenta de nuevo"})
+            }
+            bcrypt.hash(newPassword, 12).then(hashedpassword => {
+                user.password = hashedpassword
+                user.resetToken = undefined
+                user.expireDate = undefined
+                user.save().then(saveduser => {
+                    res.json({message: "Contraseña actualizada correctamente"})
+                })
+            })
+        }).catch(err =>{
+            console.log(err)
+        })
 })
 
 
